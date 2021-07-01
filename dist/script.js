@@ -974,6 +974,8 @@ function () {
   _createClass(Slider, [{
     key: "showSlides",
     value: function showSlides(n) {
+      var _this = this;
+
       if (n < 1) {
         this.slideIndex = this.slides.length;
       }
@@ -981,6 +983,20 @@ function () {
       if (n > this.slides.length) {
         this.slideIndex = 1;
       }
+
+      try {
+        this.hanson.style.display = 'none';
+
+        if (n === 3) {
+          setTimeout(function () {
+            _this.hanson.style.display = 'block';
+
+            _this.hanson.classList.add('animated', 'fadeInUp');
+          }, 3000);
+        } else {
+          this.hanson.classList.remove('fadeInUp');
+        }
+      } catch (e) {}
 
       this.slides.forEach(function (slide) {
         slide.style.display = 'none';
@@ -995,19 +1011,26 @@ function () {
   }, {
     key: "render",
     value: function render() {
-      var _this = this;
+      var _this2 = this;
+
+      try {
+        this.hanson = document.querySelector('.hanson');
+      } catch (e) {}
 
       this.triggers.forEach(function (trigger) {
         trigger.addEventListener('click', function (evt) {
           evt.preventDefault();
 
-          _this.plusSlides(1);
+          _this2.plusSlides(1); // this.showSlides(this.slideIndex += 1); - вариант без plusSlides
+
+
+          _this2.showBlock();
         });
         trigger.parentNode.previousElementSibling.addEventListener('click', function (evt) {
           evt.preventDefault();
-          _this.slideIndex = 1;
+          _this2.slideIndex = 1;
 
-          _this.showSlides(_this.slideIndex);
+          _this2.showSlides(_this2.slideIndex);
         });
       });
     }
