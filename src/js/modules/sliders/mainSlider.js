@@ -1,9 +1,8 @@
-export default class Slider {
-    constructor(page, triggers) {
-        this.page = document.querySelector(page);
-        this.slides = this.page.children;
-        this.triggers = document.querySelectorAll(triggers);
-        this.slideIndex = 1;
+import Slider from './slider';
+
+export default class MainSlider extends Slider {
+    constructor(container, triggers) {
+        super(container, triggers);
     }
 
     showSlides(n) {
@@ -49,7 +48,6 @@ export default class Slider {
                 evt.preventDefault();
                 this.plusSlides(1); 
                 // this.showSlides(this.slideIndex += 1); - вариант без plusSlides
-                this.showBlock();
             });
 
             trigger.parentNode.previousElementSibling.addEventListener('click', (evt) => {
