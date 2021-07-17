@@ -5,7 +5,7 @@ export default class Forms {
         this.status = {
             loading: "LOADING...",
             success: "It's ok! We'll call you",
-            failure: "Wow! Something wrong"
+            failure: "Wow! Something's wrong"
         };
         this.path = 'assets/question.php';
     }
