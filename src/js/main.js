@@ -1,6 +1,7 @@
 import MainSlider from './modules/sliders/mainSlider';
 import MiniSlider from './modules/sliders/miniSliders';
 import VideoPlayer from './modules/playVideos';
+import Forms from './modules/forms';
 
 window.addEventListener('DOMContentLoaded', () => {
     const slider = new MainSlider({triggers: '.next', container: '.page'});
@@ -34,4 +35,6 @@ window.addEventListener('DOMContentLoaded', () => {
 
     const player = new VideoPlayer('.showup .play', '.overlay');
     player.init();
+
+    new Forms('.form').init();
 });
