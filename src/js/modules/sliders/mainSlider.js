@@ -1,8 +1,8 @@
 import Slider from './slider';
 
 export default class MainSlider extends Slider {
-    constructor(container, triggers) {
-        super(container, triggers);
+    constructor(container, triggerNext, triggerPrev) {
+        super(container, triggerNext, triggerPrev);
     }
 
     showSlides(n) {
@@ -38,23 +38,31 @@ export default class MainSlider extends Slider {
         this.showSlides(this.slideIndex += n);
     }
 
-    render() {
-        try {
-            this.hanson = document.querySelector('.hanson');
-        } catch(e){}
-
-        this.triggers.forEach(trigger => {
+    bindTriggers(triggers, n) {
+        triggers.forEach(trigger => {
             trigger.addEventListener('click', (evt) => {
                 evt.preventDefault();
-                this.plusSlides(1); 
+                this.plusSlides(n); 
                 // this.showSlides(this.slideIndex += 1); - вариант без plusSlides
             });
 
+            // переход на 1ю страницу при клике на логотип "D"
             trigger.parentNode.previousElementSibling.addEventListener('click', (evt) => {
                 evt.preventDefault();
                 this.slideIndex = 1;
                 this.showSlides(this.slideIndex);
             });
         });
+    }
+
+    render() {
+        if (this.container) {
+            try{
+                this.hanson = document.querySelector('.hanson');
+            } catch(e){}
+
+            this.bindTriggers(this.triggerNext, 1);
+            this.bindTriggers(this.triggerPrev, -1);
+        }
     }
 }

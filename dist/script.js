@@ -4968,10 +4968,16 @@ __webpack_require__.r(__webpack_exports__);
 
 window.addEventListener('DOMContentLoaded', function () {
   var slider = new _modules_sliders_mainSlider__WEBPACK_IMPORTED_MODULE_0__["default"]({
-    triggers: '.next',
+    triggerNext: '.next',
     container: '.page'
   });
   slider.render();
+  var modulePageSlider = new _modules_sliders_mainSlider__WEBPACK_IMPORTED_MODULE_0__["default"]({
+    container: '.moduleapp',
+    triggerNext: '.next',
+    triggerPrev: '.prev'
+  });
+  modulePageSlider.render();
   var showUpSlider = new _modules_sliders_miniSliders__WEBPACK_IMPORTED_MODULE_1__["default"]({
     container: '.showup__content-slider',
     next: '.showup__next',
@@ -5029,12 +5035,14 @@ function () {
   function Differences(newOfficer, oldOfficer, items) {
     _classCallCheck(this, Differences);
 
-    this.newOfficer = document.querySelector(newOfficer);
-    this.oldOfficer = document.querySelector(oldOfficer);
-    this.newItems = this.newOfficer.querySelectorAll(items);
-    this.oldItems = this.oldOfficer.querySelectorAll(items);
-    this.newCounter = 0;
-    this.oldCounter = 0;
+    try {
+      this.newOfficer = document.querySelector(newOfficer);
+      this.oldOfficer = document.querySelector(oldOfficer);
+      this.newItems = this.newOfficer.querySelectorAll(items);
+      this.oldItems = this.oldOfficer.querySelectorAll(items);
+      this.newCounter = 0;
+      this.oldCounter = 0;
+    } catch (e) {}
   }
 
   _createClass(Differences, [{
@@ -5043,6 +5051,7 @@ function () {
       cards.forEach(function (item, i, array) {
         if (i < array.length - 1) {
           item.style.display = 'none';
+          item.classList.remove('fadeInUp');
         }
       });
     }
@@ -5050,10 +5059,12 @@ function () {
     key: "addCards",
     value: function addCards(container, cards, counter) {
       container.querySelector('.plus').addEventListener('click', function () {
+        cards[counter].classList.add('animated', 'fadeInUp');
         cards[counter].style.display = 'flex';
         counter++;
 
         if (counter === cards.length - 1) {
+          //исчезновение триггера при появлении 3го блока
           cards[cards.length - 1].style.display = 'none';
         }
       });
@@ -5061,10 +5072,12 @@ function () {
   }, {
     key: "init",
     value: function init() {
-      this.hideCards(this.newItems);
-      this.hideCards(this.oldItems);
-      this.addCards(this.newOfficer, this.newItems, this.newCounter);
-      this.addCards(this.oldOfficer, this.oldItems, this.oldCounter);
+      try {
+        this.hideCards(this.newItems);
+        this.hideCards(this.oldItems);
+        this.addCards(this.newOfficer, this.newItems, this.newCounter);
+        this.addCards(this.oldOfficer, this.oldItems, this.oldCounter);
+      } catch (e) {}
     }
   }]);
 
@@ -5399,10 +5412,10 @@ var MainSlider =
 function (_Slider) {
   _inherits(MainSlider, _Slider);
 
-  function MainSlider(container, triggers) {
+  function MainSlider(container, triggerNext, triggerPrev) {
     _classCallCheck(this, MainSlider);
 
-    return _possibleConstructorReturn(this, _getPrototypeOf(MainSlider).call(this, container, triggers));
+    return _possibleConstructorReturn(this, _getPrototypeOf(MainSlider).call(this, container, triggerNext, triggerPrev));
   }
 
   _createClass(MainSlider, [{
@@ -5443,21 +5456,18 @@ function (_Slider) {
       this.showSlides(this.slideIndex += n);
     }
   }, {
-    key: "render",
-    value: function render() {
+    key: "bindTriggers",
+    value: function bindTriggers(triggers, n) {
       var _this2 = this;
 
-      try {
-        this.hanson = document.querySelector('.hanson');
-      } catch (e) {}
-
-      this.triggers.forEach(function (trigger) {
+      triggers.forEach(function (trigger) {
         trigger.addEventListener('click', function (evt) {
           evt.preventDefault();
 
-          _this2.plusSlides(1); // this.showSlides(this.slideIndex += 1); - вариант без plusSlides
+          _this2.plusSlides(n); // this.showSlides(this.slideIndex += 1); - вариант без plusSlides
 
-        });
+        }); // переход на 1ю страницу при клике на логотип "D"
+
         trigger.parentNode.previousElementSibling.addEventListener('click', function (evt) {
           evt.preventDefault();
           _this2.slideIndex = 1;
@@ -5465,6 +5475,18 @@ function (_Slider) {
           _this2.showSlides(_this2.slideIndex);
         });
       });
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      if (this.container) {
+        try {
+          this.hanson = document.querySelector('.hanson');
+        } catch (e) {}
+
+        this.bindTriggers(this.triggerNext, 1);
+        this.bindTriggers(this.triggerPrev, -1);
+      }
     }
   }]);
 
@@ -5600,9 +5622,11 @@ function (_Slider) {
   }, {
     key: "init",
     value: function init() {
-      this.container.style.cssText = "\n            display: flex;\n            flex-wrap: wrap;\n            overflow: hidden;\n        ";
-      this.bindTriggers();
-      this.activateSlides();
+      try {
+        this.container.style.cssText = "\n                display: flex;\n                flex-wrap: wrap;\n                overflow: hidden;\n            ";
+        this.bindTriggers();
+        this.activateSlides();
+      } catch (e) {}
     }
   }]);
 
@@ -5629,8 +5653,10 @@ var Slider = function Slider() {
   var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
       _ref$container = _ref.container,
       container = _ref$container === void 0 ? null : _ref$container,
-      _ref$triggers = _ref.triggers,
-      triggers = _ref$triggers === void 0 ? null : _ref$triggers,
+      _ref$triggerNext = _ref.triggerNext,
+      triggerNext = _ref$triggerNext === void 0 ? null : _ref$triggerNext,
+      _ref$triggerPrev = _ref.triggerPrev,
+      triggerPrev = _ref$triggerPrev === void 0 ? null : _ref$triggerPrev,
       _ref$next = _ref.next,
       next = _ref$next === void 0 ? null : _ref$next,
       _ref$prev = _ref.prev,
@@ -5643,8 +5669,13 @@ var Slider = function Slider() {
   _classCallCheck(this, Slider);
 
   this.container = document.querySelector(container);
-  this.slides = this.container.children;
-  this.triggers = document.querySelectorAll(triggers);
+
+  try {
+    this.slides = this.container.children;
+  } catch (e) {}
+
+  this.triggerNext = document.querySelectorAll(triggerNext);
+  this.triggerPrev = document.querySelectorAll(triggerPrev);
   this.next = document.querySelector(next);
   this.prev = document.querySelector(prev);
   this.activeClass = activeClass;
