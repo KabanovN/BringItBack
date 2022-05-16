@@ -1,3 +1,5 @@
+# BringItUp (JS-project using classes)
+
 Реализация многостраничного сайта (index, modules) со скриптами в ООП стиле (с помощью class).
 
 В рамках тех.задания:
